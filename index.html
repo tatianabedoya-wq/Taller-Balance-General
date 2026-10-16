@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taller de Balance General</title>
+<style>
+:root{
+  --navy:#0B2545; --gold:#E8A317; --teal:#0F8B8D; --teal-dark:#0A5F61; --teal-light:#D5EEEE;
+  --red:#C0392B; --red-light:#F6DAD6; --slate:#4A5A85; --slate-light:#DDE1EC; --ok:#2E8B57; --ink:#1F2937; --gray:#6B7280; --mist:#EEF2F7; --line:#D1D9E6; --bg:#F7F9FC; --card:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Calibri,Carlito,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.45}
+header{background:var(--navy);color:#fff;padding:28px 16px 32px}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header .wrap{padding:0}
+.kicker{color:var(--gold);font-weight:700;letter-spacing:.12em;font-size:13px;text-transform:uppercase}
+h1{font-family:Cambria,Caladea,Georgia,serif;font-size:32px;margin:6px 0 8px;line-height:1.15}
+header p{margin:0;color:#D1D9E6;max-width:740px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{background:rgba(255,255,255,.1);border-radius:999px;padding:4px 12px;font-size:14px}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:20px 0}
+h2{font-family:Cambria,Caladea,Georgia,serif;color:var(--navy);font-size:24px;margin:0 0 4px}
+h3{color:var(--navy);font-size:18px;margin:22px 0 8px}
+.lead{color:var(--gray);margin:0 0 16px}
+.ctx{background:#FFF6E0;border-radius:10px;padding:14px 16px;margin:0 0 16px}
+.ctx b{color:var(--navy)}
+.steps{margin:0;padding-left:20px}
+.steps li{margin:4px 0}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.leg span{border-radius:6px;padding:4px 10px;font-size:14px;font-weight:700}
+.l-ac{background:var(--teal-light);color:var(--teal-dark)} .l-anc{background:#CFE3E3;color:var(--teal-dark)}
+.l-pc{background:var(--red-light);color:var(--red)} .l-pnc{background:#EFC9C3;color:#8E2A20} .l-pt{background:var(--slate-light);color:var(--slate)}
+table.acc{width:100%;border-collapse:collapse}
+table.acc th{background:var(--navy);color:#fff;text-align:left;font-size:14px;padding:10px;font-weight:700}
+table.acc td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.acc tr:nth-child(even) td{background:#FAFBFD}
+.name{font-weight:700;color:var(--navy)}
+.desc{color:var(--gray);font-size:14px}
+.val{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+select,input[type=text]{font:inherit;font-size:15px;padding:7px 8px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%}
+select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal)}
+.good{border-color:var(--ok)!important;background:#EAF6EF!important}
+.bad{border-color:var(--red)!important;background:#FBE9E7!important}
+.hint{display:none;font-size:13px;color:var(--red);margin-top:4px}
+.hint.show{display:block}
+.stmt{max-width:640px;margin:8px auto 0;border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.stmt .hd{text-align:center;font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.35}
+.stmt .hd span{display:block;font-weight:400;color:var(--gray);font-size:14px}
+.ln{display:grid;grid-template-columns:1fr 210px;gap:12px;align-items:center;padding:5px 0}
+.ln.h{font-weight:700;margin-top:8px}
+.ln.sub{padding-left:16px}
+.ln.tot{font-weight:700;border-radius:6px;padding:7px 8px;margin-top:4px}
+.c-a{color:var(--teal)} .c-p{color:var(--red)} .c-t{color:var(--slate)}
+.bg-a{background:var(--teal-light)} .bg-p{background:var(--red-light)} .bg-t{background:var(--slate-light)} .bg-n{background:var(--navy);color:#fff}
+.ln input{text-align:right}
+.ln .hint{grid-column:1/-1}
+.bg-n .hint{color:#FFD7D1}
+.q{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+.q.good{background:#EAF6EF} .q.bad{background:#FBE9E7}
+.q p{margin:0 0 10px;font-weight:700;color:var(--navy)}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:6px 4px;cursor:pointer;border-radius:6px}
+.q label:hover{background:rgba(15,139,141,.06)}
+.q input{margin-top:4px;accent-color:var(--teal)}
+.btn{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:10px;padding:13px 22px;cursor:pointer}
+.btn-main{background:var(--teal);color:#fff}
+.btn-main:hover{background:var(--teal-dark)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+#msg{color:var(--red);font-weight:700}
+#result,#evidence{display:none}
+.score{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.big{font-family:Cambria,Caladea,Georgia,serif;font-size:56px;font-weight:700;color:var(--teal);line-height:1}
+.parts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.part{background:var(--mist);border-radius:10px;padding:12px}
+.part b{display:block;font-size:22px;color:var(--navy)}
+.note{font-size:14px;color:var(--gray)}
+footer{color:var(--gray);font-size:13px;text-align:center;padding:24px 16px 40px}
+@media (max-width:720px){
+  h1{font-size:26px}
+  table.acc thead{display:none}
+  table.acc, table.acc tbody, table.acc tr, table.acc td{display:block;width:100%}
+  table.acc tr{border:1px solid var(--line);border-radius:10px;margin-bottom:12px;padding:6px}
+  table.acc td{border:0;padding:6px 8px}
+  table.acc td.val{text-align:left}
+  table.acc td[data-l]::before{content:attr(data-l);display:block;font-size:12px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .parts{grid-template-columns:1fr}
+  .stmt{padding:14px 10px}
+  .ln{grid-template-columns:1fr 150px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="kicker">Contabilidad de Empresas · Unidad II · Sesión 3 · Asincrónica</div>
+    <h1>Taller de Balance General en formato vertical</h1>
+    <p>Hoy trabajas por tu cuenta en el horario de clase. Arma dos balances completos: INGENIA S.A.S. y CONECTA Ingeniería S.A.S. Al calificar verás de inmediato qué está bien y dónde revisar.</p>
+    <div class="chips"><span class="chip">Martes 20 de octubre · 8:30–10:10 p. m.</span><span class="chip">3 partes · 42 puntos</span><span class="chip">Nota sobre 5,0</span><span class="chip">Evidencia PNG para Classroom</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h2>Antes de empezar</h2>
+    <ol class="steps">
+      <li>Ten a mano las diapositivas del jueves: el ejemplo ALFA Consultoría (diapositivas 14 a 16) es tu modelo.</li>
+      <li>Clasifica primero todas las cuentas y después completa el balance. Si al final no cuadra, revisa la clasificación antes que la suma.</li>
+      <li>Escribe los valores en pesos, sin signo $ (puedes usar puntos de miles).</li>
+      <li>Si tienes dudas, déjalas en el foro de Classroom. Las resolvemos el jueves.</li>
+    </ol>
+    <div class="leg" style="margin-top:14px"><span class="l-ac">AC · Activo corriente</span><span class="l-anc">ANC · Activo no corriente</span><span class="l-pc">PC · Pasivo corriente</span><span class="l-pnc">PNC · Pasivo no corriente</span><span class="l-pt">PT · Patrimonio</span></div>
+  </section>
+
+  <div id="companies"></div>
+
+  <section class="card" id="p3">
+    <h2>Parte 3 · Analiza y compara</h2>
+    <p class="lead">Usa los dos balances que acabas de construir. 4 puntos.</p>
+    <div id="qs"></div>
+  </section>
+
+  <section class="card">
+    <div class="actions">
+      <button class="btn btn-main" id="grade">Calificar</button>
+      <span id="msg"></span>
+    </div>
+    <p class="note" style="margin:10px 0 0">Puedes calificar varias veces. El comprobante registra el número de intentos y la hora.</p>
+  </section>
+
+  <section class="card" id="result">
+    <h2>Resultado</h2>
+    <div class="score">
+      <div class="big" id="nota">0,0</div>
+      <div><div id="pts" style="font-weight:700;color:var(--navy)"></div><div class="note" id="att"></div></div>
+    </div>
+    <div class="parts">
+      <div class="part">Parte 1 · INGENIA<b id="s0">0 / 17</b></div>
+      <div class="part">Parte 2 · CONECTA<b id="s1">0 / 21</b></div>
+      <div class="part">Parte 3 · Análisis<b id="s2">0 / 4</b></div>
+    </div>
+    <p class="note" id="advice" style="margin-top:12px"></p>
+  </section>
+
+  <section class="card" id="evidence">
+    <h2>Evidencia para Classroom</h2>
+    <p class="lead">Escribe tu nombre completo y descarga el comprobante. Súbelo a la tarea en Google Classroom.</p>
+    <div class="actions">
+      <input type="text" id="student" placeholder="Nombre y apellidos" style="max-width:380px" autocomplete="name">
+      <button class="btn btn-gold" id="dl">Descargar comprobante PNG</button>
+    </div>
+    <p class="note" id="dlmsg" style="margin-top:10px"></p>
+  </section>
+</main>
+<footer>Universidad Tecnológica de Pereira · Ingeniería Industrial · Contabilidad de Empresas (II243)</footer>
+
+<script>
+(function(){
+  var LOC = [["AC","AC · Activo corriente"],["ANC","ANC · Activo no corriente"],["PC","PC · Pasivo corriente"],["PNC","PNC · Pasivo no corriente"],["PT","PT · Patrimonio"]];
+  var LINES = [
+    ["ACTIVO","h","c-a"],["Total activo corriente","sub","","ac"],["Total activo no corriente","sub","","anc"],["TOTAL ACTIVO","tot","bg-a","ta"],
+    ["PASIVO","h","c-p"],["Total pasivo corriente","sub","","pc"],["Total pasivo no corriente","sub","","pnc"],["TOTAL PASIVO","tot","bg-p","tp"],
+    ["PATRIMONIO","h","c-t"],["TOTAL PATRIMONIO","tot","bg-t","pt"],["TOTAL PASIVO + PATRIMONIO","tot","bg-n","tpp"]
+  ];
+  var HINTS = {ac:"Suma lo que se convierte en efectivo, se vende o se consume en 12 meses o menos.", anc:"Solo lo que permanece más de 12 meses en la empresa.", ta:"Total activo = corriente + no corriente.",
+    pc:"Suma las obligaciones que vencen en los próximos 12 meses, incluidas las cuotas de préstamos del año.", pnc:"Solo lo que vence después de 12 meses.", tp:"Total pasivo = corriente + no corriente.",
+    pt:"Suma las cuentas de la Clase 3.", tpp:"Debe dar igual al total activo. Si no cuadra, revisa la clasificación."};
+  var CO = [
+    {id:"ing", title:"Parte 1 · INGENIA S.A.S.", lead:"Empresa de servicios. Clasifica cada cuenta y completa su Balance General. 17 puntos.",
+     ctx:"INGENIA S.A.S. presenta la siguiente información <b>al 30 de abril de 2026</b>.", hd:"INGENIA S.A.S.", date:"Al 30 de abril de 2026",
+     acc:[
+      {n:"Caja", v:1200000, c:"AC"},
+      {n:"Bancos", v:2500000, c:"AC"},
+      {n:"Cuentas por cobrar", v:3000000, c:"AC"},
+      {n:"Equipos de cómputo", v:4500000, c:"ANC"},
+      {n:"Proveedores", v:2000000, c:"PC"},
+      {n:"Préstamo a largo plazo", v:3000000, c:"PNC"},
+      {n:"Muebles y enseres", v:2000000, c:"ANC"},
+      {n:"Capital social", v:7000000, c:"PT"},
+      {n:"Utilidades retenidas", v:1200000, c:"PT"}],
+     tot:{ac:6700000, anc:6500000, ta:13200000, pc:2000000, pnc:3000000, tp:5000000, pt:8200000, tpp:13200000}},
+    {id:"con", title:"Parte 2 · CONECTA Ingeniería S.A.S.", lead:"Un caso con más detalle: lee la descripción de cada cuenta antes de clasificarla. 21 puntos.",
+     ctx:"CONECTA Ingeniería S.A.S. instala redes de fibra óptica en el Eje Cafetero. Estos son sus saldos <b>al 31 de octubre de 2026</b>.", hd:"CONECTA INGENIERÍA S.A.S.", date:"Al 31 de octubre de 2026",
+     acc:[
+      {n:"Clientes", d:"Conjuntos residenciales que pagan a 30 días", v:5300000, c:"AC"},
+      {n:"Préstamo bancario: saldo a más de 12 meses", d:"Crédito para el vehículo; última cuota en 2029", v:21600000, c:"PNC"},
+      {n:"Caja", d:"Efectivo en la oficina", v:800000, c:"AC"},
+      {n:"IVA por pagar", d:"Bimestre septiembre–octubre; se paga en noviembre", v:1700000, c:"PC"},
+      {n:"CDT a 2 años", d:"Inversión que vence en octubre de 2028", v:4000000, c:"ANC"},
+      {n:"Capital social", d:"Aportes de los socios", v:25000000, c:"PT"},
+      {n:"Vehículo", d:"Camioneta con la que los técnicos van a las obras", v:38000000, c:"ANC"},
+      {n:"Préstamo bancario: cuotas de los próximos 12 meses", d:"Parte del crédito del vehículo que vence antes de octubre de 2027", v:7200000, c:"PC"},
+      {n:"Bancos", d:"Saldo en cuenta corriente", v:6400000, c:"AC"},
+      {n:"Retención en la fuente por pagar", d:"Retenida a proveedores; se gira a la DIAN en noviembre", v:400000, c:"PC"},
+      {n:"Equipo de computación", d:"Computadores y equipos de medición de fibra", v:9500000, c:"ANC"},
+      {n:"Utilidad del ejercicio", d:"Ganancia de enero a octubre de 2026", v:5000000, c:"PT"},
+      {n:"Proveedores", d:"Compra de cable y conectores, pago a 60 días", v:3100000, c:"PC"}],
+     tot:{ac:12500000, anc:51500000, ta:64000000, pc:12400000, pnc:21600000, tp:34000000, pt:30000000, tpp:64000000}}
+  ];
+  var QS = [
+    {p:"¿Cuál es el nivel de endeudamiento de CONECTA (pasivo total ÷ activo total)?", o:["53 %","113 %","47 %","19 %"], a:0, h:"Divide el total pasivo entre el total activo de CONECTA."},
+    {p:"La razón corriente de CONECTA es aproximadamente 1,01. ¿Qué indica?", o:["Tiene el triple de lo que necesita para pagar sus deudas de corto plazo","Tiene casi lo justo: por cada $1 que debe a corto plazo, tiene $1,01 que se vuelve efectivo pronto","No puede pagar ninguna de sus deudas","Su patrimonio es negativo"], a:1, h:"Razón corriente = activo corriente ÷ pasivo corriente. ¿Qué significa un resultado cercano a 1?"},
+    {p:"INGENIA tiene un endeudamiento de 38 % y CONECTA de 53 %. ¿Cuál depende más de la financiación de terceros?", o:["INGENIA, porque tiene más cuentas por cobrar","Las dos dependen igual","CONECTA, porque de cada $100 de activo, $53 los financian terceros","No se puede saber sin el Estado de Resultados"], a:2, h:"Un porcentaje de endeudamiento más alto significa más deuda por cada peso de activo."},
+    {p:"CONECTA tiene un CDT de $4.000.000. ¿Por qué no le ayuda a pagar sus deudas del próximo año?", o:["Porque los CDT no son activos","Porque vence en 2028: es activo no corriente y no estará disponible en los próximos 12 meses","Porque está a nombre de los socios","Sí le ayuda: todo CDT es activo corriente"], a:1, h:"Recuerda el CDT a 18 meses de Café de la Montaña."}
+  ];
+
+  var fmt = function(v){return "$" + v.toLocaleString("es-CO");};
+  var host = document.getElementById("companies");
+  CO.forEach(function(co){
+    var s = document.createElement("section"); s.className="card";
+    var rows = co.acc.map(function(a,i){
+      var sel = '<select id="'+co.id+'c'+i+'" aria-label="Ubicación de '+a.n+'"><option value="">Elige…</option>' + LOC.map(function(l){return '<option value="'+l[0]+'">'+l[1]+'</option>';}).join("") + '</select>';
+      return '<tr><td><div class="name">'+(i+1)+'. '+a.n+'</div>'+(a.d?'<div class="desc">'+a.d+'</div>':'')+'</td><td class="val" data-l="Saldo">'+fmt(a.v)+'</td><td data-l="Ubicación">'+sel+'</td></tr>';
+    }).join("");
+    var st = LINES.map(function(L){
+      if(L[1]==="h") return '<div class="ln h '+L[2]+'"><div>'+L[0]+'</div><div></div></div>';
+      var id = co.id+"_"+L[3];
+      return '<div class="ln '+L[1]+' '+L[2]+'"><label for="'+id+'">'+L[0]+'</label><input type="text" inputmode="numeric" id="'+id+'"><div class="hint" id="h'+id+'">'+HINTS[L[3]]+'</div></div>';
+    }).join("");
+    s.innerHTML = '<h2>'+co.title+'</h2><p class="lead">'+co.lead+'</p><div class="ctx">'+co.ctx+'</div>' +
+      '<h3>A. Clasifica las cuentas</h3><table class="acc"><thead><tr><th>Cuenta</th><th style="text-align:right">Saldo</th><th style="width:240px">Ubicación</th></tr></thead><tbody>'+rows+'</tbody></table>' +
+      '<h3>B. Completa el Balance General</h3><div class="stmt"><div class="hd">'+co.hd+'<br>Estado de Situación Financiera<span>'+co.date+' · Cifras en pesos colombianos</span></div>'+st+'</div>';
+    host.appendChild(s);
+  });
+  var qs = document.getElementById("qs");
+  QS.forEach(function(q,i){
+    var d = document.createElement("div"); d.className="q"; d.id="q"+i;
+    d.innerHTML = '<p>'+(i+1)+'. '+q.p+'</p>' + q.o.map(function(o,j){return '<label><input type="radio" name="r'+i+'" value="'+j+'"><span>'+o+'</span></label>';}).join("") + '<div class="hint" id="qh'+i+'">Pista: '+q.h+'</div>';
+    qs.appendChild(d);
+  });
+
+  function num(s){var t=(s||"").replace(/[^0-9]/g,""); return t===""?null:parseInt(t,10);}
+  function mark(el,ok){el.classList.remove("good","bad"); el.classList.add(ok?"good":"bad");}
+  var KEYS = ["ac","anc","ta","pc","pnc","tp","pt","tpp"];
+  var KLAB = {ac:"Activo corriente",anc:"Activo no corriente",ta:"Total activo",pc:"Pasivo corriente",pnc:"Pasivo no corriente",tp:"Total pasivo",pt:"Total patrimonio",tpp:"Total pasivo + patrimonio"};
+
+  var attempts=0, last=null;
+  document.getElementById("grade").addEventListener("click", function(){
+    var msg=document.getElementById("msg"); msg.textContent="";
+    var missing=0;
+    CO.forEach(function(co){
+      co.acc.forEach(function(a,i){ if(!document.getElementById(co.id+"c"+i).value) missing++; });
+      KEYS.forEach(function(k){ if(num(document.getElementById(co.id+"_"+k).value)===null) missing++; });
+    });
+    QS.forEach(function(q,i){ if(!document.querySelector('input[name="r'+i+'"]:checked')) missing++; });
+    if(missing>0){ msg.textContent="Te faltan "+missing+" respuestas por completar."; return; }
+
+    attempts++;
+    var sc=[0,0,0], det=[];
+    CO.forEach(function(co,ci){
+      var d={cls:0, ncls:co.acc.length, tots:{}};
+      co.acc.forEach(function(a,i){ var el=document.getElementById(co.id+"c"+i), ok=el.value===a.c; mark(el,ok); if(ok){sc[ci]++; d.cls++;} });
+      KEYS.forEach(function(k){ var el=document.getElementById(co.id+"_"+k), v=num(el.value), ok=v===co.tot[k];
+        mark(el,ok); document.getElementById("h"+co.id+"_"+k).classList.toggle("show",!ok); if(ok) sc[ci]++; d.tots[k]={v:v,ok:ok}; });
+      det.push(d);
+    });
+    var qans=[];
+    QS.forEach(function(q,i){ var v=parseInt(document.querySelector('input[name="r'+i+'"]:checked').value,10), ok=v===q.a;
+      mark(document.getElementById("q"+i),ok); document.getElementById("qh"+i).classList.toggle("show",!ok); if(ok) sc[2]++; qans.push(ok); });
+    var pts=sc[0]+sc[1]+sc[2], nota=Math.round(pts/42*50)/10;
+    last={sc:sc,pts:pts,nota:nota,det:det,qans:qans,attempt:attempts,when:new Date()};
+    document.getElementById("result").style.display="block";
+    document.getElementById("evidence").style.display="block";
+    document.getElementById("nota").textContent=nota.toFixed(1).replace(".",",");
+    document.getElementById("pts").textContent=pts+" de 42 puntos";
+    document.getElementById("att").textContent="Intento "+attempts;
+    document.getElementById("s0").textContent=sc[0]+" / 17";
+    document.getElementById("s1").textContent=sc[1]+" / 21";
+    document.getElementById("s2").textContent=sc[2]+" / 4";
+    document.getElementById("advice").textContent = pts===42 ? "¡Excelente! Los dos balances cuadran. Escribe tu nombre y descarga tu comprobante." :
+      "Las casillas en rojo tienen error. Revísalas con ayuda de las pistas y vuelve a calificar, o descarga el comprobante con este resultado.";
+    document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
+  function hash(str){var h=2166136261; for(var i=0;i<str.length;i++){h^=str.charCodeAt(i); h=Math.imul(h,16777619);} return ("00000000"+(h>>>0).toString(16)).slice(-8).toUpperCase();}
+  function rr(c,x0,y0,w,h,r){c.beginPath();c.moveTo(x0+r,y0);c.arcTo(x0+w,y0,x0+w,y0+h,r);c.arcTo(x0+w,y0+h,x0,y0+h,r);c.arcTo(x0,y0+h,x0,y0,r);c.arcTo(x0,y0,x0+w,y0,r);c.closePath();}
+
+  document.getElementById("dl").addEventListener("click", function(){
+    var name=document.getElementById("student").value.trim(), m=document.getElementById("dlmsg");
+    if(!last){ m.textContent="Primero califica la actividad."; return; }
+    if(name.length<5){ m.textContent="Escribe tu nombre completo para generar el comprobante."; return; }
+    var W=1200,H=1020,cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+    var x=cv.getContext("2d"), F='Calibri, Carlito, "Segoe UI", Arial, sans-serif', S='Cambria, Caladea, Georgia, serif';
+    x.fillStyle="#FFFFFF"; x.fillRect(0,0,W,H);
+    x.fillStyle="#0B2545"; x.fillRect(0,0,W,190);
+    x.fillStyle="#E8A317"; x.font="700 22px "+F; x.fillText("CONTABILIDAD DE EMPRESAS · UNIDAD II · SESIÓN 3 (ASINCRÓNICA)",60,62);
+    x.fillStyle="#FFFFFF"; x.font="700 42px "+S; x.fillText("Taller de Balance General",60,118);
+    x.fillStyle="#D1D9E6"; x.font="22px "+F; x.fillText("INGENIA S.A.S. y CONECTA Ingeniería S.A.S. · Comprobante autocalificable",60,158);
+    var d=last.when, when=d.toLocaleDateString("es-CO",{day:"2-digit",month:"long",year:"numeric"})+" · "+d.toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});
+    x.fillStyle="#1F2937"; x.font="700 30px "+F; x.fillText(name,60,250);
+    x.fillStyle="#6B7280"; x.font="22px "+F; x.fillText(when+" · Intento "+last.attempt,60,285);
+    x.fillStyle="#EEF2F7"; rr(x,820,215,320,150,16); x.fill();
+    x.fillStyle="#0F8B8D"; x.font="700 76px "+S; x.textAlign="center"; x.fillText(last.nota.toFixed(1).replace(".",","),980,310);
+    x.fillStyle="#1F2937"; x.font="22px "+F; x.fillText(last.pts+" de 42 puntos",980,345); x.textAlign="left";
+    [["Parte 1 · INGENIA",last.sc[0]+" / 17"],["Parte 2 · CONECTA",last.sc[1]+" / 21"],["Parte 3 · Análisis",last.sc[2]+" / 4"]].forEach(function(p,i){ var px=60+i*360; x.fillStyle="#EEF2F7"; rr(x,px,395,340,86,12); x.fill(); x.fillStyle="#6B7280"; x.font="20px "+F; x.fillText(p[0],px+20,428); x.fillStyle="#0B2545"; x.font="700 30px "+F; x.fillText(p[1],px+20,466); });
+    var y=540;
+    CO.forEach(function(co,ci){
+      var dd=last.det[ci];
+      x.fillStyle="#0B2545"; x.font="700 24px "+F; x.fillText(co.hd+" · clasificación "+dd.cls+" / "+dd.ncls,60,y); y+=36;
+      KEYS.forEach(function(k,j){ var t=dd.tots[k], col=j%2, row=Math.floor(j/2), px=60+col*560, py=y+row*32;
+        x.fillStyle="#1F2937"; x.font="19px "+F; x.fillText(KLAB[k],px,py);
+        x.fillStyle=t.ok?"#2E8B57":"#C0392B"; x.font="700 19px "+F; x.fillText((t.ok?"✓ ":"✗ ")+"$"+t.v.toLocaleString("es-CO"),px+270,py); });
+      y+=4*32+24;
+    });
+    x.fillStyle="#0B2545"; x.font="700 24px "+F; x.fillText("Preguntas de análisis",60,y);
+    last.qans.forEach(function(ok,i){ x.fillStyle=ok?"#2E8B57":"#C0392B"; x.font="700 22px "+F; x.fillText((i+1)+(ok?" ✓":" ✗"),330+i*80,y); });
+    var code=hash(name+"|"+last.pts+"|"+last.attempt+"|"+d.toISOString()+"|"+JSON.stringify(last.det));
+    x.fillStyle="#6B7280"; x.font="18px "+F; x.fillText("Código de verificación: "+code,60,H-40);
+    x.textAlign="right"; x.fillText("UTP · Ingeniería Industrial · II243",W-60,H-40);
+    var a=document.createElement("a");
+    a.download="Sesion3_Taller_"+name.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,"").trim().replace(/\s+/g,"_")+".png";
+    a.href=cv.toDataURL("image/png"); document.body.appendChild(a); a.click(); a.remove();
+    m.textContent="Comprobante descargado (código "+code+"). Súbelo a la tarea en Classroom.";
+  });
+})();
+</script>
+</body>
+</html>
